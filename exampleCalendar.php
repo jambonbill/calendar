@@ -16,8 +16,18 @@ require_once 'google-api-php-client/src/Google/autoload.php'; // or wherever aut
 try{
   $client = new Google_Client();
   $client->setApplicationName("Client_Library_Examples");
-  $client->setDeveloperKey("AIzaSyCjCyPYZkpQMjipf11rbHM_eoG6uGdJm_M");  
-  //$client->setClientSecret("");
+  $client->setDeveloperKey("AIzaSyCjCyPYZkpQMjipf11rbHM_eoG6uGdJm_M");  //jambon key
+  
+  //http://stackoverflow.com/questions/24464739/google-api-php-uncaught-exception-on-createauthurl
+  $client->setScopes(array(
+     'https://www.googleapis.com/auth/plus.login',
+     'profile',
+     'email',
+     'openid',
+  ));
+  //$client->setClientId('{clientid}.apps.googleusercontent.com');//?
+  //$client->setClientSecret('{clientsecret}');//?
+  
   //$client->authenticate("");
   //die('check');
 }
@@ -26,7 +36,12 @@ catch (Exception $e){
   echo 'Caught exception: ',  $e->getMessage(), "\n";
 }
 
+if (!$client->getAccessToken()) {
+    echo "Error: !\$client->getAccessToken()\n";
+    exit;
+}  
 
+die('youpi');
 
 echo "new Google_Service_Calendar(\$client);\n";
 $service = new Google_Service_Calendar($client);
