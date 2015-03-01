@@ -22,6 +22,7 @@ try{
   //http://stackoverflow.com/questions/24464739/google-api-php-uncaught-exception-on-createauthurl
   $client->setScopes(array(
      'https://www.googleapis.com/auth/plus.login',
+     'calendar',
      'profile',
      'email',
      'openid',
@@ -40,6 +41,8 @@ catch (Exception $e){
   echo 'Caught exception: ',  $e->getMessage(), "\n";
 }
 
+//$client::$auth->refreshTokenWithAssertion();//test
+
 if (!$client->getAccessToken()) {
     echo "Error: !\$client->getAccessToken()\n";
     exit;
@@ -49,30 +52,3 @@ if (!$client->getAccessToken()) {
 
 die('youpi');
 
-echo "new Google_Service_Calendar(\$client);\n";
-$service = new Google_Service_Calendar($client);
-
-// https://developers.google.com/google-apps/calendar/v3/reference/calendarList/list
-$calendarList = $service->calendarList->listCalendarList();
-while(true) {
-  foreach ($calendarList->getItems() as $calendarListEntry) {
-    echo $calendarListEntry->getSummary();
-  }
-  $pageToken = $calendarList->getNextPageToken();
-  if ($pageToken) {
-    $optParams = array('pageToken' => $pageToken);
-    $calendarList = $service->calendarList->listCalendarList($optParams);
-  } else {
-    break;
-  }
-}
-
-die("ok");
-
-//https://developers.google.com/google-apps/calendar/v3/reference/calendarList/get
-//$calendarListEntry = $service->calendarList->get('0qfrti6gst4q8hpl89utm8elno@group.calendar.google.com');
-//$calendarListEntry = $service->calendarList->get('jambonbill@gmail.com');
-//echo $calendarListEntry->getSummary();
-
-
-die("ok");
